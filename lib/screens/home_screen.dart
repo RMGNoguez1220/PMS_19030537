@@ -248,7 +248,7 @@ class _HomeScreenState extends State<HomeScreen>
         '2',
         'assets/GearsBackground.jpg',
         'assets/gear.png',
-        'assets/gear.png',
+        'assets/LancerRetro.png',
         'assets/gear.png',
         'assets/MarcusFenix.png',
         'Es un soldado rudo y veterano que lidera la lucha contra los Locust, una raza alienígena que amenaza a la humanidad.',
