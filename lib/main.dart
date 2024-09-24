@@ -1,6 +1,7 @@
 import 'package:flutter/material.dart';
 import 'package:pmsn2024b/screens/home_screen.dart';
 import 'package:pmsn2024b/screens/login_screen.dart';
+import 'package:pmsn2024b/screens/movies_screen.dart';
 import 'package:pmsn2024b/settings/global_values.dart';
 import 'package:pmsn2024b/settings/theme_settings.dart';
 
@@ -15,10 +16,15 @@ class MyApp extends StatelessWidget {
         valueListenable: GlobalValues.banThemeDark,
         builder: (context, value, widget) {
           return MaterialApp(
-            theme: value ? ThemeSettings.darkTheme() : ThemeSettings.lightTheme(context),
+            theme: value
+                ? ThemeSettings.darkTheme()
+                : ThemeSettings.lightTheme(context),
             title: 'Material App',
-            home: LoginScreen(),
-            routes: {"/home": (context) => HomeScreen()},
+            home: const LoginScreen(),
+            routes: {
+              "/home": (context) => const HomeScreen(),
+              "/db": (context) => const MoviesScreen()
+            },
             debugShowCheckedModeBanner: false,
           );
         });

@@ -80,7 +80,7 @@ class gameCard extends StatelessWidget {
         height: cardHeight,
         bottom: size.height * .12,
         child: Container(
-          margin: EdgeInsets.symmetric(horizontal: 30),
+          margin: const EdgeInsets.symmetric(horizontal: 30),
           child: ClipRRect(
             borderRadius: BorderRadius.circular(25),
             child: Image.asset(
@@ -97,11 +97,11 @@ class gameCard extends StatelessWidget {
       height: cardHeight,
       bottom: size.height * .12,
       child: Container(
-        margin: EdgeInsets.symmetric(horizontal: 30),
+        margin: const EdgeInsets.symmetric(horizontal: 30),
         decoration: BoxDecoration(
             color: game.darkColor.withOpacity(.50),
             borderRadius: BorderRadius.circular(25)),
-        padding: EdgeInsets.all(30),
+        padding: const EdgeInsets.all(30),
         child: Transform.translate(
           offset: Offset(-columnAnimation, 0),
           child: Column(
@@ -110,15 +110,15 @@ class gameCard extends StatelessWidget {
               const Text(
                 'Acerca de...',
                 style: TextStyle(
-                    fontSize: 35,
+                    fontSize: 32,
                     fontWeight: FontWeight.bold,
                     color: Colors.white),
               ),
-              SizedBox(height: 10),
-              Text(game.description, style: TextStyle(color: Colors.white70, fontSize: 18)),
-              Spacer(),
+              const SizedBox(height: 10),
+              Text(game.description, style: const TextStyle(color: Colors.white70, fontSize: 18)),
+              const Spacer(),
               
-              SizedBox(height: 15),
+              const SizedBox(height: 15),
               Container(
                 height: 40,
                 decoration: BoxDecoration(
@@ -131,9 +131,9 @@ class gameCard extends StatelessWidget {
                       Text('\$',
                           style: TextStyle(fontSize: 20, color: Colors.white)),
                       SizedBox(width: 10),
-                      Text('\39.',
+                      Text('39.',
                           style: TextStyle(fontSize: 19, color: Colors.white)),
-                      Text('\99',
+                      Text('99',
                           style: TextStyle(fontSize: 14, color: Colors.white)),
                     ],
                   ),

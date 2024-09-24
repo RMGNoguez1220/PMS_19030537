@@ -25,7 +25,7 @@ class _HomeScreenState extends State<HomeScreen>
   @override
   void initState() {
     controller =
-        AnimationController(vsync: this, duration: Duration(milliseconds: 800));
+        AnimationController(vsync: this, duration: const Duration(milliseconds: 800));
     animation = CurvedAnimation(parent: controller, curve: Curves.easeOutBack);
     pageController = PageController(viewportFraction: .8);
     pageController.addListener(() {
@@ -52,7 +52,12 @@ class _HomeScreenState extends State<HomeScreen>
     Size size = MediaQuery.of(context).size;
     return Scaffold(
       appBar: AppBar(
-        title: Animate(effects: const [ ShimmerEffect(colors: [Color.fromARGB(255, 255, 255, 255), Color.fromARGB(255, 84, 133, 0)], duration: Duration(seconds: 4))], child: const Text('Bienvenido')),
+        title: Animate(effects: const [
+          ShimmerEffect(colors: [
+            Color.fromARGB(255, 255, 255, 255),
+            Color.fromARGB(255, 84, 133, 0)
+          ], duration: Duration(seconds: 4))
+        ], child: const Text('Bienvenido')),
         leading: Builder(builder: (context) {
           return AnimatedBuilder(
               animation: animation,
@@ -96,57 +101,7 @@ class _HomeScreenState extends State<HomeScreen>
         ),
       ),
       // endDrawer: Drawer(),
-      drawer: Drawer(
-        child: ListView(
-          children: <Widget>[
-            Container(
-              color: ColorsSettings.navColor,
-              height: 40,
-              child: Stack(
-                children: [
-                  Positioned(
-                    top: 0,
-                    right: 0,
-                    child: IconButton(
-                      icon: const Icon(Icons.close, color: Colors.white),
-                      onPressed: () {
-                        Navigator.of(context).pop(); // Cierra el Drawer
-                      },
-                    ),
-                  ),
-                  const Center(
-                    child: Text(
-                      'Menu',
-                      style: TextStyle(
-                        color: Colors.white,
-                        fontSize: 24,
-                      ),
-                    ),
-                  ),
-                ],
-              ),
-            ),
-            ListTile(
-              title: const Text(
-                'Item 1',
-                style: TextStyle(fontWeight: FontWeight.bold),
-              ),
-              onTap: () {
-                // Acción cuando se presiona el item
-              },
-            ),
-            ListTile(
-              title: const Text(
-                'Item 2',
-                style: TextStyle(fontWeight: FontWeight.bold),
-              ),
-              onTap: () {
-                // Acción cuando se presiona el item
-              },
-            ),
-          ],
-        ),
-      ),
+      drawer: myDrawer(),
       bottomNavigationBar: ConvexAppBar(
         backgroundColor: const Color.fromARGB(255, 100, 206, 108),
         items: const [
@@ -167,12 +122,14 @@ class _HomeScreenState extends State<HomeScreen>
           distance: 50,
           children: [
             FloatingActionButton.small(
+              heroTag: "btn1",
               onPressed: () {
                 GlobalValues.banThemeDark.value = false;
               },
               child: const Icon(Icons.light_mode),
             ),
             FloatingActionButton.small(
+              heroTag: "btn2",
               onPressed: () {
                 GlobalValues.banThemeDark.value = true;
               },
@@ -195,7 +152,7 @@ class _HomeScreenState extends State<HomeScreen>
               transform: Matrix4.identity()
                 ..translate(0.0, size.height / 2 * (1 - animation.value))
                 ..scale(1 + (1 - animation.value)),
-              origin: Offset(25, 25),
+              origin: const Offset(25, 25),
               child: InkWell(
                 onTap: () => controller.isCompleted
                     ? controller.reverse()
@@ -213,7 +170,7 @@ class _HomeScreenState extends State<HomeScreen>
 
   Widget buildPager(Size size) {
     return Container(
-      margin: EdgeInsets.only(top: 70),
+      margin: const EdgeInsets.only(top: 70),
       height: size.height - 50,
       child: AnimatedBuilder(
           animation: animation,
@@ -259,39 +216,105 @@ class _HomeScreenState extends State<HomeScreen>
 
   Widget buildPageIndecator() {
     return AnimatedBuilder(
-      animation: controller,
-      builder: (context, snapshot) {
-        return Positioned(
-          bottom: 10,
-          left: 10,
-          child: Opacity(
-            opacity: controller.value,
-            child: Row(
-              children:
-                  List.generate(getGames().length, (index) => buildContainer(index)),
+        animation: controller,
+        builder: (context, snapshot) {
+          return Positioned(
+            bottom: 10,
+            left: 10,
+            child: Opacity(
+              opacity: controller.value,
+              child: Row(
+                children: List.generate(
+                    getGames().length, (index) => buildContainer(index)),
+              ),
             ),
-          ),
-        );
-      }
-    );
+          );
+        });
   }
 
   Widget buildContainer(int index) {
     double animate = pageOffset - index;
-    double size = 10; 
+    double size = 10;
     animate = animate.abs();
     Color? color = Colors.grey;
     if (animate <= 1 && animate >= 0) {
-      size = 10 + 10*(1-animate);
-      color = ColorTween(begin: Colors.grey, end: Colors.green).transform((1-animate));
+      size = 10 + 10 * (1 - animate);
+      color = ColorTween(begin: Colors.grey, end: Colors.green)
+          .transform((1 - animate));
     }
 
     return Container(
-      margin: EdgeInsets.all(4),
+      margin: const EdgeInsets.all(4),
       height: size,
       width: size,
-      decoration: BoxDecoration(
-          color: color, borderRadius: BorderRadius.circular(20)),
+      decoration:
+          BoxDecoration(color: color, borderRadius: BorderRadius.circular(20)),
+    );
+  }
+
+  Widget myDrawer() {
+    return Drawer(
+      child: ListView(
+        children: [
+          const UserAccountsDrawerHeader(
+            currentAccountPicture: CircleAvatar(
+              backgroundImage: NetworkImage(
+                  'https://media.licdn.com/dms/image/D5603AQEvFY-0hKRnJQ/profile-displayphoto-shrink_200_200/0/1666403772623?e=2147483647&v=beta&t=TQe6lICPdQYZ5ZsfBEtnnTREGE3eQ-Zo5DBXPEfBm5A'),
+            ),
+            accountName: Text('Rick Noguez'),
+            accountEmail: Text('19030537@itcelaya.edu.mx'),
+          ),
+          Container(
+            color: ColorsSettings.navColor,
+            height: 40,
+            child: Stack(
+              children: [
+                Positioned(
+                  top: 0,
+                  right: 0,
+                  child: IconButton(
+                    icon: const Icon(Icons.close, color: Colors.white),
+                    onPressed: () {
+                      Navigator.of(context).pop(); // Cierra el Drawer
+                    },
+                  ),
+                ),
+                const Center(
+                  child: Text(
+                    'Menu',
+                    style: TextStyle(
+                      color: Colors.white,
+                      fontSize: 24,
+                    ),
+                  ),
+                ),
+              ],
+            ),
+          ),
+          ListTile(
+            onTap: () {
+              // Acción cuando se presiona el item
+              Navigator.pushNamed(context, '/db');
+            },
+            title: const Text(
+              'Movie List',
+              style: TextStyle(fontWeight: FontWeight.bold),
+            ),
+            subtitle: const Text('DatabaseMovies'),
+            leading: const Icon(Icons.movie),
+            trailing: const Icon(Icons.chevron_right),
+          ),
+          ListTile(
+            title: const Text(
+              'Item 2',
+              style: TextStyle(fontWeight: FontWeight.bold),
+            ),
+            onTap: () {
+              // Acción cuando se presiona el item
+            },
+          ),
+        ],
+      ),
     );
   }
 }

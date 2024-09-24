@@ -22,11 +22,15 @@ class MoviesDatabase {
       path,
       version: VERSIONDB,
       onCreate: (db, version) {
-        String query = '''
+        String query1 = '''
         CREATE TABLE tblgenre(
           idGenre CHAR(1) PRIMARY KEY,
           dscgenre VARCHAR(50)
-        );
+        ); ''';
+
+        db.execute(query1);
+
+        String query2 = '''
 
         CREATE TABLE tblmovies(
           idMovie INTEGER PRIMARY KEY,
@@ -37,25 +41,28 @@ class MoviesDatabase {
           releaseDate CHAR(10),
           CONSTRAINT fk_gen FOREIGN KEY(idGenre) REFERENCES tblgenre(idGenre)
         );''';
-        db.execute(query);
+        db.execute(query2);
       },
     );
   } // initDatabase
 
   Future<int> INSERT(String table, Map<String, dynamic> row) async {
-    var conn = await database; //recupero la conexión con la instancia o la crea en el caso de que no exista
+    var conn =
+        await database; //recupero la conexión con la instancia o la crea en el caso de que no exista
     return conn.insert(table, row);
   }
 
   Future<int> UPDATE(String table, Map<String, dynamic> row) async {
     var conn = await database;
-    return conn.update(table, row, where: 'idMovie = ?', whereArgs: [row['idMovie']]);
+    return conn
+        .update(table, row, where: 'idMovie = ?', whereArgs: [row['idMovie']]);
   }
 
   Future<int> DELETE(String table, int idMovie) async {
     var conn = await database;
     return await conn.delete(table, where: 'idMovie = ?', whereArgs: [idMovie]);
   }
+
   Future<List<MoviesDAO>> SELECT() async {
     var conn = await database;
     var result = await conn.query('tblmovies');
