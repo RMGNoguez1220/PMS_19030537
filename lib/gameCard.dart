@@ -2,6 +2,8 @@ import 'package:flutter/material.dart';
 import 'package:pmsn2024b/game.dart';
 import 'dart:math' as math;
 
+import 'package:pmsn2024b/settings/colors_settings.dart';
+
 class gameCard extends StatelessWidget {
   Game game;
   double pageOffset;
@@ -16,7 +18,7 @@ class gameCard extends StatelessWidget {
   Widget build(BuildContext context) {
     Size size = MediaQuery.of(context).size;
     double cardWidth = size.width - 60;
-    double cardHeight = size.height * .55;
+    double cardHeight = size.height * .54;
     double count = 0;
     double page;
     rotate = index - pageOffset;
@@ -122,7 +124,7 @@ class gameCard extends StatelessWidget {
               Container(
                 height: 40,
                 decoration: BoxDecoration(
-                    color: Colors.green, borderRadius: BorderRadius.circular(20)),
+                    color: ColorsSettings.bottomColor, borderRadius: BorderRadius.circular(20)),
                 child: const Center(
                   child: Row(
                     crossAxisAlignment: CrossAxisAlignment.end,
@@ -148,13 +150,13 @@ class gameCard extends StatelessWidget {
 
   Widget buildCharacterImage(Size size) {
     return Positioned(
-      bottom: 5,
-      right: -size.width * .4 / 2 + 30,
+      bottom: 50,
+      right: -size.width * .4 / 2 + 65,
       child: Transform.rotate(
         angle: -math.pi/14*rotate,
         child: Image.asset(
           game.characterImage,
-          height: size.height * .55 - 15,
+          height: size.height * .34 - 15,
         ),
       ),
     );

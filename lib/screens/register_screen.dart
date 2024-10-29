@@ -1,28 +1,51 @@
 import 'package:flutter/material.dart';
+import 'package:pmsn2024b/firebase/email_auth.dart';
 import 'package:pmsn2024b/settings/colors_settings.dart';
 
-class LoginScreen extends StatefulWidget {
-  const LoginScreen({super.key});
+class RegisterScreen extends StatefulWidget {
+  const RegisterScreen({super.key});
 
   @override
-  State<LoginScreen> createState() => _LoginScreenState();
+  State<RegisterScreen> createState() => _RegisterScreenState();
 }
 
-class _LoginScreenState extends State<LoginScreen> {
+class _RegisterScreenState extends State<RegisterScreen> {
+  final conName = TextEditingController();
   final conUser = TextEditingController();
   final conPwd = TextEditingController();
   bool isLoading = false;
+  EmailAuth auth = EmailAuth();
 
   @override
   Widget build(BuildContext context) {
-    TextFormField txtUser = TextFormField(
+    TextFormField txtName = TextFormField(
+      keyboardType: TextInputType.name,
+      controller: conName,
+      decoration: const InputDecoration(
+        labelText: 'Nombre completo',
+        filled: true,
+        fillColor: Color.fromARGB(255, 229, 236, 58),
+        prefixIcon: Icon(Icons.short_text),
+        border: OutlineInputBorder(
+            borderRadius: BorderRadius.all(Radius.circular(10))),
+        focusedBorder: OutlineInputBorder(
+          borderSide: BorderSide(
+            color: Color.fromARGB(
+                255, 100, 206, 108), // Color del borde cuando está enfocado
+            width: 3.0, // Ancho del borde
+          ),
+        ),
+      ),
+    );
+
+    final txtUser = TextFormField(
       keyboardType: TextInputType.emailAddress,
       controller: conUser,
       decoration: const InputDecoration(
-        labelText: 'Correo',
         filled: true,
+        labelText: 'Correo',
         fillColor: Color.fromARGB(255, 229, 236, 58),
-        prefixIcon: Icon(Icons.person),
+        prefixIcon: Icon(Icons.person_outline),
         border: OutlineInputBorder(
             borderRadius: BorderRadius.all(Radius.circular(10))),
         focusedBorder: OutlineInputBorder(
@@ -40,8 +63,8 @@ class _LoginScreenState extends State<LoginScreen> {
       obscureText: true,
       controller: conPwd,
       decoration: const InputDecoration(
-        labelText: 'Contraseña',
         filled: true,
+        labelText: 'Contraseña',
         fillColor: Color.fromARGB(255, 229, 236, 58),
         prefixIcon: Icon(Icons.password),
         border: OutlineInputBorder(
@@ -57,7 +80,7 @@ class _LoginScreenState extends State<LoginScreen> {
     );
 
     final ctnCredentials = Positioned(
-      bottom: 105,
+      bottom: 110,
       child: Container(
         width: MediaQuery.of(context).size.width * .9,
         // margin: EdgeInsets.symmetric(horizontal: 10),
@@ -65,6 +88,10 @@ class _LoginScreenState extends State<LoginScreen> {
         child: ListView(
           shrinkWrap: true,
           children: [
+            Padding(
+              padding: const EdgeInsets.only(bottom: 5),
+              child: txtName,
+            ),
             Padding(
               padding: const EdgeInsets.only(bottom: 5),
               child: txtUser,
@@ -75,7 +102,7 @@ class _LoginScreenState extends State<LoginScreen> {
       ),
     );
 
-    final btnLogin = Positioned(
+    final btnRegister = Positioned(
       width: MediaQuery.of(context).size.width * .6,
       height: MediaQuery.of(context).size.height * .046,
       bottom: 60,
@@ -84,46 +111,45 @@ class _LoginScreenState extends State<LoginScreen> {
             backgroundColor: ColorsSettings.btnLoginColor),
         onPressed: () {
           isLoading = true;
-          setState(() {});
-          Future.delayed(const Duration(milliseconds: 1000)).then((value) => {
-                isLoading = false,
-                setState(() {}),
-                Navigator.pushNamed(context, "/home")
-              });
-        },
-        icon: const Icon(
-          Icons.login,
-          color: Color.fromARGB(255, 229, 236, 58),
-        ),
-        label: const Text(
-          ' Log in    ',
-          style: TextStyle(color: Color.fromARGB(255, 0, 0, 0)),
-        ),
-      ),
-    );
-
-    final btnRegister = Positioned(
-      width: MediaQuery.of(context).size.width * .6,
-      height: MediaQuery.of(context).size.height * .046,
-      bottom: 10,
-      child: ElevatedButton.icon(
-        style: ElevatedButton.styleFrom(
-            backgroundColor: ColorsSettings.btnLoginColor),
-        onPressed: () {
-          isLoading = true;
-          setState(() {});
-          Future.delayed(const Duration(milliseconds: 500)).then((value) => {
-                isLoading = false,
-                setState(() {}),
-                Navigator.pushNamed(context, "/register")
-              });
+          auth.createUser(conName.text, conUser.text, conPwd.text).then(
+            (value) {
+              value
+                  ? setState(() {
+                      isLoading = false;
+                    })
+                  : isLoading;
+              Navigator.pushNamed(context, "/login");
+            },
+          );
         },
         icon: const Icon(
           Icons.app_registration,
           color: Color.fromARGB(255, 229, 236, 58),
         ),
         label: const Text(
-          'Sign up',
+          'Registrar',
+          style: TextStyle(color: Color.fromARGB(255, 0, 0, 0)),
+        ),
+      ),
+    );
+
+    final btnCancel = Positioned(
+      width: MediaQuery.of(context).size.width * .6,
+      height: MediaQuery.of(context).size.height * .046,
+      bottom: 10, // Lo colocamos un poco más abajo que el de registrarse
+      child: ElevatedButton.icon(
+        style: ElevatedButton.styleFrom(
+            backgroundColor: ColorsSettings.btnLoginColor),
+        onPressed: () {
+          // Regresa a la pantalla de login
+          Navigator.pushNamed(context, "/login");
+        },
+        icon: const Icon(
+          Icons.keyboard_return,
+          color: Color.fromARGB(255, 229, 236, 58),
+        ),
+        label: const Text(
+          'Cancelar',
           style: TextStyle(color: Color.fromARGB(255, 0, 0, 0)),
         ),
       ),
@@ -151,13 +177,16 @@ class _LoginScreenState extends State<LoginScreen> {
         child: Stack(
           alignment: Alignment.center,
           children: [
-            Positioned(
+            const Positioned(
               top: 30,
-              child: Image.asset('assets/halo-wide.png', width: 300),
+              child: Text(
+                '¡Bievenido!',
+                style: TextStyle(fontSize: 60, fontWeight: FontWeight.bold),
+              ),
             ),
             ctnCredentials,
-            btnLogin,
             btnRegister,
+            btnCancel,
             isLoading ? gifLoading : Container(),
           ],
         ),

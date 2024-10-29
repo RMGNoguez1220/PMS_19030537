@@ -1,6 +1,8 @@
 import 'package:flutter/material.dart';
 import 'package:pmsn2024b/database/movies_database.dart';
 import 'package:pmsn2024b/models/moviesdao.dart';
+import 'package:pmsn2024b/settings/global_values.dart';
+import 'package:pmsn2024b/views/movie_view.dart';
 import 'package:pmsn2024b/views/movie_view_item.dart';
 import 'package:wolt_modal_sheet/wolt_modal_sheet.dart';
 
@@ -16,7 +18,6 @@ class _MoviesScreenState extends State<MoviesScreen> {
 
   @override
   void initState() {
-    // TODO: implement initState
     super.initState();
     moviesDB = MoviesDatabase();
   }
@@ -33,7 +34,7 @@ class _MoviesScreenState extends State<MoviesScreen> {
                 context: context,
                 pageListBuilder: (context) => [
                   WoltModalSheetPage(
-                    child: const Text('Aquí debe de aparecer el modal'),
+                    child: MovieView(),
                   )
                 ],
               );
@@ -42,30 +43,34 @@ class _MoviesScreenState extends State<MoviesScreen> {
           )
         ],
       ),
-      body: FutureBuilder(
-          future: moviesDB.SELECT(),
-          builder: (context, AsyncSnapshot<List<MoviesDAO>> snapshot) {
-            if (snapshot.hasData) {
-              return ListView.builder(
-                itemCount: snapshot.data!.length,
-                itemBuilder: (context, index) {
-                  return const Text('Hola');
-                  // return MovieViewItem(
-                  //   moviesDAO: snapshot.data![index],
-                  // );
-                },
-              );
-            } else {
-              if (snapshot.hasError) {
-                return const Center(
-                  child: Text('Something was wrong! :)'),
-                );
-              } else {
-                return const Center(
-                  child: CircularProgressIndicator(),
-                );
-              }
-            }
+      body: ValueListenableBuilder(
+          valueListenable: GlobalValues.banUpdListMovies,
+          builder: (context, value, widget) {
+            return FutureBuilder(
+                future: moviesDB.SELECT(),
+                builder: (context, AsyncSnapshot<List<MoviesDAO>?> snapshot) {
+                  if (snapshot.hasData) {
+                    return ListView.builder(
+                      itemCount: snapshot.data!.length,
+                      itemBuilder: (context, index) {
+                        return MovieViewItem(
+                          moviesDAO: snapshot.data![index],
+                        );
+                        // return const Text('Hola');
+                      },
+                    );
+                  } else {
+                    if (snapshot.hasError) {
+                      return Center(
+                        child: Text(snapshot.error.toString()),
+                      );
+                    } else {
+                      return const Center(
+                        child: CircularProgressIndicator(),
+                      );
+                    }
+                  }
+                });
           }),
     );
   }

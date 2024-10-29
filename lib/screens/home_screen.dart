@@ -4,9 +4,11 @@ import 'package:flutter_animate/flutter_animate.dart';
 import 'package:flutter_expandable_fab/flutter_expandable_fab.dart';
 import 'package:pmsn2024b/game.dart';
 import 'package:pmsn2024b/gameCard.dart';
+import 'package:pmsn2024b/provider/test_provider.dart';
 import 'package:pmsn2024b/screens/profile_screen.dart';
 import 'package:pmsn2024b/settings/colors_settings.dart';
 import 'package:pmsn2024b/settings/global_values.dart';
+import 'package:provider/provider.dart';
 
 class HomeScreen extends StatefulWidget {
   const HomeScreen({super.key});
@@ -24,8 +26,9 @@ class _HomeScreenState extends State<HomeScreen>
 
   @override
   void initState() {
-    controller =
-        AnimationController(vsync: this, duration: const Duration(milliseconds: 800));
+    super.initState();
+    controller = AnimationController(
+        vsync: this, duration: const Duration(milliseconds: 800));
     animation = CurvedAnimation(parent: controller, curve: Curves.easeOutBack);
     pageController = PageController(viewportFraction: .8);
     pageController.addListener(() {
@@ -33,14 +36,12 @@ class _HomeScreenState extends State<HomeScreen>
         pageOffset = pageController.page!;
       });
     });
-    super.initState();
   }
 
   @override
   void dispose() {
     controller.dispose();
     pageController.dispose();
-
     super.dispose();
   }
 
@@ -49,23 +50,33 @@ class _HomeScreenState extends State<HomeScreen>
 
   @override
   Widget build(BuildContext context) {
+    final testProvider = Provider.of<TestProvider>(context);
     Size size = MediaQuery.of(context).size;
     return Scaffold(
       appBar: AppBar(
-        title: Animate(effects: const [
-          ShimmerEffect(colors: [
-            Color.fromARGB(255, 255, 255, 255),
-            Color.fromARGB(255, 84, 133, 0)
-          ], duration: Duration(seconds: 4))
-        ], child: const Text('Bienvenido')),
+        title: Animate(
+          effects: const [
+            ShimmerEffect(colors: [
+              Color.fromARGB(255, 255, 255, 255),
+              Color.fromARGB(255, 92, 121, 76)
+            ], duration: Duration(seconds: 5))
+          ],
+          child: const Text(
+            'BIENVENIDO',
+            style: TextStyle(fontWeight: FontWeight.bold),
+          ),
+        ),
         leading: Builder(builder: (context) {
           return AnimatedBuilder(
               animation: animation,
               builder: (context, snapshot) {
                 return Transform.translate(
-                  offset: Offset(-200.0 * (1 - animation.value), 0),
+                  offset: const Offset(0, 0),
                   child: IconButton(
-                    icon: const Icon(Icons.menu),
+                    icon: const Icon(
+                      Icons.menu,
+                      color: Colors.white,
+                    ),
                     tooltip: 'Menu',
                     onPressed: () {
                       Scaffold.of(context).openDrawer();
@@ -74,52 +85,75 @@ class _HomeScreenState extends State<HomeScreen>
                 );
               });
         }),
-        backgroundColor: ColorsSettings.navColor,
+        backgroundColor: ColorsSettings.bottomColor,
         actions: [
           GestureDetector(
             onTap: () {},
             child: MouseRegion(
               cursor: SystemMouseCursors.click,
               child: AnimatedBuilder(
-                  animation: animation,
-                  builder: (context, snapshot) {
-                    return Transform.translate(
-                        offset: Offset(200.0 * (1 - animation.value), 0),
-                        child: Image.asset('assets/game_icon.png'));
-                  }),
+                animation: animation,
+                builder: (context, snapshot) {
+                  return Transform.translate(
+                    offset: Offset(200.0 * (1 - animation.value), 0),
+                    child: Image.asset(
+                      'assets/game_icon.png',
+                      color: Colors.white,
+                    ),
+                  );
+                },
+              ),
             ),
           ),
         ],
+        centerTitle: true,
       ),
-      body: SafeArea(
-        child: Stack(
-          children: <Widget>[
-            buildLogo(size),
-            buildPager(size),
-            buildPageIndecator()
-          ],
-        ),
+      body: Builder(
+        builder: (context) {
+          switch (index) {
+            case 1:
+              return const ProfileScreen();
+            default:
+              return SafeArea(
+                child: Stack(
+                  children: <Widget>[
+                    buildLogo(size),
+                    buildPager(size),
+                    buildPageIndecator()
+                  ],
+                ),
+              );
+          }
+        },
       ),
       // endDrawer: Drawer(),
-      drawer: myDrawer(),
+      drawer: myDrawer(testProvider),
       bottomNavigationBar: ConvexAppBar(
-        backgroundColor: const Color.fromARGB(255, 100, 206, 108),
+        backgroundColor: ColorsSettings.bottomColor,
         items: const [
           TabItem(icon: Icons.home, title: 'Home'),
           TabItem(icon: Icons.person, title: 'Profile'),
           TabItem(icon: Icons.exit_to_app, title: 'Exit'),
         ],
         onTap: (int i) => setState(() {
-          index = i;
+          if (i == 2) {
+            // El índice 2 corresponde a la opción "Exit"
+            Navigator.pushReplacementNamed(context, '/login');
+          } else {
+            setState(() {
+              index = i;
+            });
+          }
         }),
       ),
       floatingActionButtonLocation: ExpandableFab.location,
       floatingActionButton: Padding(
-        padding: const EdgeInsets.only(bottom: 20),
+        padding: const EdgeInsets.only(bottom: 35),
         child: ExpandableFab(
           // openButtonBuilder: RotateFloatingActionButtonBuilder(),
           type: ExpandableFabType.up,
           distance: 50,
+          pos: ExpandableFabPos.left,
           children: [
             FloatingActionButton.small(
               heroTag: "btn1",
@@ -178,10 +212,11 @@ class _HomeScreenState extends State<HomeScreen>
             return Transform.translate(
               offset: Offset(400.0 * (1 - animation.value), 0),
               child: PageView.builder(
-                  controller: pageController,
-                  itemCount: getGames().length,
-                  itemBuilder: (context, index) =>
-                      gameCard(getGames()[index], pageOffset, index)),
+                controller: pageController,
+                itemCount: getGames().length,
+                itemBuilder: (context, index) =>
+                    gameCard(getGames()[index], pageOffset, index),
+              ),
             );
           }),
     );
@@ -219,8 +254,8 @@ class _HomeScreenState extends State<HomeScreen>
         animation: controller,
         builder: (context, snapshot) {
           return Positioned(
-            bottom: 10,
-            left: 10,
+            bottom: 20,
+            left: 4,
             child: Opacity(
               opacity: controller.value,
               child: Row(
@@ -239,7 +274,7 @@ class _HomeScreenState extends State<HomeScreen>
     Color? color = Colors.grey;
     if (animate <= 1 && animate >= 0) {
       size = 10 + 10 * (1 - animate);
-      color = ColorTween(begin: Colors.grey, end: Colors.green)
+      color = ColorTween(begin: Colors.grey, end: ColorsSettings.bottomColor)
           .transform((1 - animate));
     }
 
@@ -252,20 +287,12 @@ class _HomeScreenState extends State<HomeScreen>
     );
   }
 
-  Widget myDrawer() {
+  Widget myDrawer(TestProvider testProvider) {
     return Drawer(
       child: ListView(
         children: [
-          const UserAccountsDrawerHeader(
-            currentAccountPicture: CircleAvatar(
-              backgroundImage: NetworkImage(
-                  'https://media.licdn.com/dms/image/D5603AQEvFY-0hKRnJQ/profile-displayphoto-shrink_200_200/0/1666403772623?e=2147483647&v=beta&t=TQe6lICPdQYZ5ZsfBEtnnTREGE3eQ-Zo5DBXPEfBm5A'),
-            ),
-            accountName: Text('Rick Noguez'),
-            accountEmail: Text('19030537@itcelaya.edu.mx'),
-          ),
           Container(
-            color: ColorsSettings.navColor,
+            color: ColorsSettings.bottomColor,
             height: 40,
             child: Stack(
               children: [
@@ -291,6 +318,18 @@ class _HomeScreenState extends State<HomeScreen>
               ],
             ),
           ),
+          UserAccountsDrawerHeader(
+            currentAccountPicture: const CircleAvatar(
+              backgroundImage: NetworkImage(
+                  'https://media.licdn.com/dms/image/D5603AQEvFY-0hKRnJQ/profile-displayphoto-shrink_200_200/0/1666403772623?e=2147483647&v=beta&t=TQe6lICPdQYZ5ZsfBEtnnTREGE3eQ-Zo5DBXPEfBm5A'),
+            ),
+            accountName: Text(
+              testProvider.name,
+              style: const TextStyle(fontWeight: FontWeight.bold),
+            ),
+            accountEmail: const Text('19030537@itcelaya.edu.mx'),
+            decoration: BoxDecoration(color: ColorsSettings.navColor),
+          ),
           ListTile(
             onTap: () {
               // Acción cuando se presiona el item
@@ -305,13 +344,14 @@ class _HomeScreenState extends State<HomeScreen>
             trailing: const Icon(Icons.chevron_right),
           ),
           ListTile(
+            onTap: () => Navigator.pushNamed(context, '/popular'),
             title: const Text(
-              'Item 2',
+              'Popular Movies',
               style: TextStyle(fontWeight: FontWeight.bold),
             ),
-            onTap: () {
-              // Acción cuando se presiona el item
-            },
+            subtitle: const Text('API of movies'),
+            leading: const Icon(Icons.movie),
+            trailing: const Icon(Icons.chevron_right),
           ),
         ],
       ),
