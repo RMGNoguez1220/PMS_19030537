@@ -5,12 +5,17 @@ import 'package:pmsn2024b/provider/test_provider.dart';
 import 'package:pmsn2024b/screens/detail_popular_screen.dart';
 import 'package:pmsn2024b/screens/home_screen.dart';
 import 'package:pmsn2024b/screens/login_screen.dart';
+import 'package:pmsn2024b/screens/maps_screen.dart';
 import 'package:pmsn2024b/screens/movies_screen.dart';
+import 'package:pmsn2024b/screens/movies_screen_firebase.dart';
+import 'package:pmsn2024b/screens/onboarding/onboarding_screen1.dart';
+import 'package:pmsn2024b/screens/onboarding/onboarding_screen2.dart';
+import 'package:pmsn2024b/screens/onboarding/onboarding_screen3.dart';
 import 'package:pmsn2024b/screens/popular_screen.dart';
+import 'package:pmsn2024b/screens/preferences_theme_screen.dart';
 import 'package:pmsn2024b/screens/profile_screen.dart';
 import 'package:pmsn2024b/screens/register_screen.dart';
-import 'package:pmsn2024b/settings/global_values.dart';
-import 'package:pmsn2024b/settings/theme_settings.dart';
+import 'package:pmsn2024b/settings/theme_notifier.dart';
 import 'package:provider/provider.dart';
 
 void main() async{
@@ -19,30 +24,41 @@ void main() async{
   runApp( const MyApp());
 }
 
-class MyApp extends StatelessWidget {
+class MyApp extends StatefulWidget {
   const MyApp({super.key});
 
   @override
+  State<MyApp> createState() => _MyAppState();
+}
+
+class _MyAppState extends State<MyApp> {
+  final themeNotifier = ThemeNotifier();
+
+  @override
   Widget build(BuildContext context) {
-    return ValueListenableBuilder(
-        valueListenable: GlobalValues.banThemeDark,
+    return ValueListenableBuilder<ThemeData>(
+        valueListenable: themeNotifier,
         builder: (context, value, widget) {
           return ChangeNotifierProvider(
             create: (context) => TestProvider(),
             child: MaterialApp(
-              theme: value
-                  ? ThemeSettings.darkTheme()
-                  : ThemeSettings.lightTheme(context),
-              title: 'Material App',
+              theme: value,
               home: const LoginScreen(),
               routes: {
                 "/login": (context) => const LoginScreen(),
                 "/register": (context) => const RegisterScreen(),
                 "/profile": (context) => const ProfileScreen(),
-                "/home": (context) => const HomeScreen(),
+                "/home": (context) => HomeScreen(themeNotifier: themeNotifier),
                 "/db": (context) => const MoviesScreen(),
                 "/popular": (context) => const PopularScreen(),
-                "/detail": (context) => const DetailPopularScreen()
+                "/detail": (context) => const DetailPopularScreen(),
+                "/moviesfirebase": (context) => const MoviesScreenFirebase(),
+                "/maps": (context) => const MapsScreen(),
+                "/onboarding1": (context) => const OnboardingScreen1(),
+                "/onboarding2": (context) => const OnboardingScreen2(),
+                "/onboarding3": (context) => OnboardingScreen3(themeNotifier: themeNotifier),
+                "/preferencestheme": (context) => PreferencesThemeScreen(themeNotifier: themeNotifier),
+
               },
               debugShowCheckedModeBanner: false,
             ),

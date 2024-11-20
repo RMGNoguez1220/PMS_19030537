@@ -112,12 +112,12 @@ class gameCard extends StatelessWidget {
               const Text(
                 'Acerca de...',
                 style: TextStyle(
-                    fontSize: 32,
+                    fontSize: 30,
                     fontWeight: FontWeight.bold,
                     color: Colors.white),
               ),
               const SizedBox(height: 10),
-              Text(game.description, style: const TextStyle(color: Colors.white70, fontSize: 18)),
+              Text(game.description, style: const TextStyle(color: Colors.white70, fontSize: 14)),
               const Spacer(),
               
               const SizedBox(height: 15),

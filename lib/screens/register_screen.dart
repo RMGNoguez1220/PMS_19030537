@@ -23,11 +23,21 @@ class _RegisterScreenState extends State<RegisterScreen> {
       controller: conName,
       decoration: const InputDecoration(
         labelText: 'Nombre completo',
+        labelStyle: TextStyle(color: Colors.black),
         filled: true,
         fillColor: Color.fromARGB(255, 229, 236, 58),
-        prefixIcon: Icon(Icons.short_text),
+        prefixIcon: Icon(Icons.short_text, color: Colors.black),
         border: OutlineInputBorder(
-            borderRadius: BorderRadius.all(Radius.circular(10))),
+          borderRadius: BorderRadius.all(
+            Radius.circular(10),
+          ),
+        ),
+        enabledBorder: OutlineInputBorder(
+          borderSide: BorderSide(
+            color: Colors.green,
+            width: 1.3,
+          ),
+        ),
         focusedBorder: OutlineInputBorder(
           borderSide: BorderSide(
             color: Color.fromARGB(
@@ -44,10 +54,20 @@ class _RegisterScreenState extends State<RegisterScreen> {
       decoration: const InputDecoration(
         filled: true,
         labelText: 'Correo',
+        labelStyle: TextStyle(color: Colors.black),
         fillColor: Color.fromARGB(255, 229, 236, 58),
-        prefixIcon: Icon(Icons.person_outline),
+        prefixIcon: Icon(Icons.person_outline, color: Colors.black),
         border: OutlineInputBorder(
-            borderRadius: BorderRadius.all(Radius.circular(10))),
+          borderRadius: BorderRadius.all(
+            Radius.circular(10),
+          ),
+        ),
+        enabledBorder: OutlineInputBorder(
+          borderSide: BorderSide(
+            color: Colors.green,
+            width: 1.3,
+          ),
+        ),
         focusedBorder: OutlineInputBorder(
           borderSide: BorderSide(
             color: Color.fromARGB(
@@ -65,10 +85,20 @@ class _RegisterScreenState extends State<RegisterScreen> {
       decoration: const InputDecoration(
         filled: true,
         labelText: 'Contraseña',
+        labelStyle: TextStyle(color: Colors.black),
         fillColor: Color.fromARGB(255, 229, 236, 58),
-        prefixIcon: Icon(Icons.password),
+        prefixIcon: Icon(Icons.password, color: Colors.black),
         border: OutlineInputBorder(
-            borderRadius: BorderRadius.all(Radius.circular(10))),
+          borderRadius: BorderRadius.all(
+            Radius.circular(10),
+          ),
+        ),
+        enabledBorder: OutlineInputBorder(
+          borderSide: BorderSide(
+            color: Colors.green,
+            width: 1.3,
+          ),
+        ),
         focusedBorder: OutlineInputBorder(
           borderSide: BorderSide(
             color: Color.fromARGB(
@@ -108,6 +138,7 @@ class _RegisterScreenState extends State<RegisterScreen> {
       bottom: 60,
       child: ElevatedButton.icon(
         style: ElevatedButton.styleFrom(
+            side: const BorderSide(color: Colors.black, width: 1.5),
             backgroundColor: ColorsSettings.btnLoginColor),
         onPressed: () {
           isLoading = true;
@@ -128,7 +159,10 @@ class _RegisterScreenState extends State<RegisterScreen> {
         ),
         label: const Text(
           'Registrar',
-          style: TextStyle(color: Color.fromARGB(255, 0, 0, 0)),
+          style: TextStyle(
+            color: Color.fromARGB(255, 0, 0, 0),
+            fontWeight: FontWeight.bold,
+          ),
         ),
       ),
     );
@@ -139,6 +173,7 @@ class _RegisterScreenState extends State<RegisterScreen> {
       bottom: 10, // Lo colocamos un poco más abajo que el de registrarse
       child: ElevatedButton.icon(
         style: ElevatedButton.styleFrom(
+            side: const BorderSide(color: Colors.black, width: 1.5),
             backgroundColor: ColorsSettings.btnLoginColor),
         onPressed: () {
           // Regresa a la pantalla de login
@@ -150,7 +185,10 @@ class _RegisterScreenState extends State<RegisterScreen> {
         ),
         label: const Text(
           'Cancelar',
-          style: TextStyle(color: Color.fromARGB(255, 0, 0, 0)),
+          style: TextStyle(
+            color: Color.fromARGB(255, 0, 0, 0),
+            fontWeight: FontWeight.bold,
+          ),
         ),
       ),
     );
@@ -177,11 +215,14 @@ class _RegisterScreenState extends State<RegisterScreen> {
         child: Stack(
           alignment: Alignment.center,
           children: [
-            const Positioned(
+            Positioned(
               top: 30,
               child: Text(
-                '¡Bievenido!',
-                style: TextStyle(fontSize: 60, fontWeight: FontWeight.bold),
+                '¡Bienvenido!',
+                style: TextStyle(
+                    color: Theme.of(context).colorScheme.onSurface,
+                    fontSize: 54,
+                    fontWeight: FontWeight.bold),
               ),
             ),
             ctnCredentials,

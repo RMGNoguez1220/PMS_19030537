@@ -52,6 +52,12 @@ class _ProfileScreenState extends State<ProfileScreen> {
     }
   }
 
+  // Método para guardar la imagen seleccionada
+  Future<void> _saveProfileImage(String path) async {
+    final prefs = await SharedPreferences.getInstance();
+    await prefs.setString('profile_image_path', path);
+  }
+
   // Método para cargar la imagen guardada
   Future<void> _loadProfileImage() async {
     final prefs = await SharedPreferences.getInstance();
@@ -61,12 +67,6 @@ class _ProfileScreenState extends State<ProfileScreen> {
         _image = XFile(imagePath);
       });
     }
-  }
-
-  // Método para guardar la imagen seleccionada
-  Future<void> _saveProfileImage(String path) async {
-    final prefs = await SharedPreferences.getInstance();
-    await prefs.setString('profile_image_path', path);
   }
 
   // Método para eliminar la imagen actual
@@ -129,9 +129,23 @@ class _ProfileScreenState extends State<ProfileScreen> {
             TextField(
               controller: _nameController,
               readOnly: true,
-              decoration: const InputDecoration(
+              style: TextStyle(
+                color: Theme.of(context).colorScheme.onSurface,
+                fontWeight: FontWeight.normal,
+              ),
+              decoration: InputDecoration(
                 labelText: 'Nombre completo',
-                border: OutlineInputBorder(),
+                border: const OutlineInputBorder(),
+                filled: true,
+                fillColor: Theme.of(context)
+                    .hintColor
+                    .withRed(255)
+                    .withGreen(101)
+                    .withBlue(34),
+                labelStyle: TextStyle(
+                  color: Theme.of(context).colorScheme.onSurface,
+                  fontWeight: FontWeight.bold,
+                ),
               ),
             ),
             const SizedBox(height: 30),
@@ -143,9 +157,23 @@ class _ProfileScreenState extends State<ProfileScreen> {
                   child: TextField(
                     controller: _emailController,
                     readOnly: true,
-                    decoration: const InputDecoration(
+                    style: TextStyle(
+                      color: Theme.of(context).colorScheme.onSurface,
+                      fontWeight: FontWeight.normal,
+                    ),
+                    decoration: InputDecoration(
                       labelText: 'Correo electrónico',
-                      border: OutlineInputBorder(),
+                      border: const OutlineInputBorder(),
+                      filled: true,
+                      fillColor: Theme.of(context)
+                          .hintColor
+                          .withRed(255)
+                          .withGreen(101)
+                          .withBlue(34),
+                      labelStyle: TextStyle(
+                        color: Theme.of(context).colorScheme.onSurface,
+                        fontWeight: FontWeight.bold,
+                      ),
                     ),
                   ),
                 ),
@@ -165,9 +193,23 @@ class _ProfileScreenState extends State<ProfileScreen> {
                   child: TextField(
                     controller: _telefonoController,
                     readOnly: true,
-                    decoration: const InputDecoration(
+                    style: TextStyle(
+                      color: Theme.of(context).colorScheme.onSurface,
+                      fontWeight: FontWeight.normal,
+                    ),
+                    decoration: InputDecoration(
                       labelText: 'Teléfono',
-                      border: OutlineInputBorder(),
+                      border: const OutlineInputBorder(),
+                      filled: true,
+                      fillColor: Theme.of(context)
+                          .hintColor
+                          .withRed(255)
+                          .withGreen(101)
+                          .withBlue(34),
+                      labelStyle: TextStyle(
+                        color: Theme.of(context).colorScheme.onSurface,
+                        fontWeight: FontWeight.bold,
+                      ),
                     ),
                   ),
                 ),
@@ -187,9 +229,23 @@ class _ProfileScreenState extends State<ProfileScreen> {
                   child: TextField(
                     controller: _githubController,
                     readOnly: true,
-                    decoration: const InputDecoration(
+                    style: TextStyle(
+                      color: Theme.of(context).colorScheme.onSurface,
+                      fontWeight: FontWeight.normal,
+                    ),
+                    decoration: InputDecoration(
                       labelText: 'GitHub',
-                      border: OutlineInputBorder(),
+                      border: const OutlineInputBorder(),
+                      filled: true,
+                      fillColor: Theme.of(context)
+                          .hintColor
+                          .withRed(255)
+                          .withGreen(101)
+                          .withBlue(34),
+                      labelStyle: TextStyle(
+                        color: Theme.of(context).colorScheme.onSurface,
+                        fontWeight: FontWeight.bold,
+                      ),
                     ),
                   ),
                 ),

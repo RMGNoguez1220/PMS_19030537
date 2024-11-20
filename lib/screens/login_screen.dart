@@ -1,5 +1,6 @@
 import 'package:flutter/material.dart';
 import 'package:pmsn2024b/settings/colors_settings.dart';
+import 'package:shared_preferences/shared_preferences.dart';
 
 class LoginScreen extends StatefulWidget {
   const LoginScreen({super.key});
@@ -13,18 +14,41 @@ class _LoginScreenState extends State<LoginScreen> {
   final conPwd = TextEditingController();
   bool isLoading = false;
 
+  Future<void> _setOnboardingSeen() async {
+    final prefs = await SharedPreferences.getInstance();
+    await prefs.setBool('onboardingSeen', true);
+  }
+
+  Future<bool> _getOnboardingSeen() async {
+    final prefs = await SharedPreferences.getInstance();
+    return prefs.getBool('onboardingSeen') ?? false;
+  }
+
   @override
   Widget build(BuildContext context) {
+    final screenWidth = MediaQuery.of(context).size.width;
+    final screenHeight = MediaQuery.of(context).size.height;
+
     TextFormField txtUser = TextFormField(
       keyboardType: TextInputType.emailAddress,
       controller: conUser,
       decoration: const InputDecoration(
         labelText: 'Correo',
+        labelStyle: TextStyle(color: Colors.black),
         filled: true,
         fillColor: Color.fromARGB(255, 229, 236, 58),
-        prefixIcon: Icon(Icons.person),
+        prefixIcon: Icon(Icons.person, color: Colors.black),
         border: OutlineInputBorder(
-            borderRadius: BorderRadius.all(Radius.circular(10))),
+          borderRadius: BorderRadius.all(
+            Radius.circular(10),
+          ),
+        ),
+        enabledBorder: OutlineInputBorder(
+          borderSide: BorderSide(
+            color: Colors.red,
+            width: 1.3,
+          ),
+        ),
         focusedBorder: OutlineInputBorder(
           borderSide: BorderSide(
             color: Color.fromARGB(
@@ -41,11 +65,21 @@ class _LoginScreenState extends State<LoginScreen> {
       controller: conPwd,
       decoration: const InputDecoration(
         labelText: 'Contraseña',
+        labelStyle: TextStyle(color: Colors.black),
         filled: true,
         fillColor: Color.fromARGB(255, 229, 236, 58),
-        prefixIcon: Icon(Icons.password),
+        prefixIcon: Icon(Icons.password, color: Colors.black),
         border: OutlineInputBorder(
-            borderRadius: BorderRadius.all(Radius.circular(10))),
+          borderRadius: BorderRadius.all(
+            Radius.circular(10),
+          ),
+        ),
+        enabledBorder: OutlineInputBorder(
+          borderSide: BorderSide(
+            color: Colors.red,
+            width: 1.3,
+          ),
+        ),
         focusedBorder: OutlineInputBorder(
           borderSide: BorderSide(
             color: Color.fromARGB(
@@ -59,9 +93,11 @@ class _LoginScreenState extends State<LoginScreen> {
     final ctnCredentials = Positioned(
       bottom: 105,
       child: Container(
-        width: MediaQuery.of(context).size.width * .9,
+        width: screenWidth * .9,
         // margin: EdgeInsets.symmetric(horizontal: 10),
-        decoration: BoxDecoration(borderRadius: BorderRadius.circular(10)),
+        decoration: BoxDecoration(
+          borderRadius: BorderRadius.circular(10),
+        ),
         child: ListView(
           shrinkWrap: true,
           children: [
@@ -76,38 +112,51 @@ class _LoginScreenState extends State<LoginScreen> {
     );
 
     final btnLogin = Positioned(
-      width: MediaQuery.of(context).size.width * .6,
-      height: MediaQuery.of(context).size.height * .046,
+      width: screenWidth * .6,
+      height: screenHeight * .046,
       bottom: 60,
       child: ElevatedButton.icon(
         style: ElevatedButton.styleFrom(
+            side: const BorderSide(color: Colors.black, width: 1.5),
             backgroundColor: ColorsSettings.btnLoginColor),
-        onPressed: () {
+        onPressed: () async {
           isLoading = true;
           setState(() {});
-          Future.delayed(const Duration(milliseconds: 1000)).then((value) => {
-                isLoading = false,
-                setState(() {}),
-                Navigator.pushNamed(context, "/home")
-              });
+          bool onboardingSeen = await _getOnboardingSeen();
+          await Future.delayed(const Duration(milliseconds: 1000))
+              .then((value) async => {
+                    isLoading = false,
+                    setState(() {}),
+                    if (onboardingSeen)
+                      {Navigator.pushReplacementNamed(context, "/home")}
+                    else
+                      {
+                        await _setOnboardingSeen(),
+                        Navigator.pushReplacementNamed(context, '/onboarding1')
+                      }
+                  });
         },
         icon: const Icon(
           Icons.login,
           color: Color.fromARGB(255, 229, 236, 58),
         ),
         label: const Text(
-          ' Log in    ',
-          style: TextStyle(color: Color.fromARGB(255, 0, 0, 0)),
+          ' Log in ',
+          style: TextStyle(
+            color: Color.fromARGB(255, 0, 0, 0),
+            fontWeight: FontWeight.bold,
+          ),
         ),
       ),
     );
 
     final btnRegister = Positioned(
-      width: MediaQuery.of(context).size.width * .6,
-      height: MediaQuery.of(context).size.height * .046,
+      width: screenWidth * .6,
+      height: screenHeight * .046,
       bottom: 10,
       child: ElevatedButton.icon(
         style: ElevatedButton.styleFrom(
+            side: const BorderSide(color: Colors.black, width: 1.5),
             backgroundColor: ColorsSettings.btnLoginColor),
         onPressed: () {
           isLoading = true;
@@ -124,24 +173,27 @@ class _LoginScreenState extends State<LoginScreen> {
         ),
         label: const Text(
           'Sign up',
-          style: TextStyle(color: Color.fromARGB(255, 0, 0, 0)),
+          style: TextStyle(
+            color: Color.fromARGB(255, 0, 0, 0),
+            fontWeight: FontWeight.bold,
+          ),
         ),
       ),
     );
 
     final gifLoading = Positioned(
-      top: 40,
+      bottom: 100,
       child: Image.asset(
         'assets/Loading.gif',
-        height: 200,
-        width: 200,
+        height: screenHeight,
+        width: screenWidth,
       ),
     );
 
     return Scaffold(
       body: Container(
-        height: MediaQuery.of(context).size.height,
-        width: MediaQuery.of(context).size.width,
+        height: screenHeight,
+        width: screenWidth,
         decoration: const BoxDecoration(
           image: DecorationImage(
             fit: BoxFit.scaleDown,
@@ -153,7 +205,27 @@ class _LoginScreenState extends State<LoginScreen> {
           children: [
             Positioned(
               top: 30,
-              child: Image.asset('assets/halo-wide.png', width: 300),
+              child: Container(
+                decoration: BoxDecoration(
+                  color:
+                      Colors.white.withOpacity(0.4), // Fondo semitransparente
+                  borderRadius: BorderRadius.circular(15), // Bordes redondeados
+                  boxShadow: [
+                    BoxShadow(
+                      color: Colors.black.withOpacity(0.3),
+                      blurRadius: 10,
+                      offset: const Offset(0, 50), // Sombra hacia abajo
+                    ),
+                  ],
+                ),
+                padding: const EdgeInsets.all(
+                  10,
+                ), // Espaciado interno alrededor de la imagen
+                child: Image.asset(
+                  'assets/halo-wide.png',
+                  width: 300,
+                ),
+              ),
             ),
             ctnCredentials,
             btnLogin,

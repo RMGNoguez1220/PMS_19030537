@@ -42,7 +42,7 @@ class _MovieViewItemState extends State<MovieViewItem> {
           Row(
             children: [
               Image.network(
-                'https://i.etsystatic.com/18242346/r/il/933afb/6210006997/il_570xN.6210006997_9fqx.jpg',
+                'https://image.tmdb.org/t/p/w600_and_h900_bestv2/nmqLwaTfgyWLQWbYd82w159cAqJ.jpg',
                 height: 100,
               )
               // Image.asset(

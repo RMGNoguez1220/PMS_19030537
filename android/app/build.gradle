@@ -37,7 +37,7 @@ android {
         release {
             // TODO: Add your own signing config for the release build.
             // Signing with the debug keys for now, so `flutter run --release` works.
-            signingConfig = signingConfigs.debug
+            signingConfig = signingConfigs.debug //NOTA: Cuando se lance una publicación de una app, en vez de poner debug, se pone release.
         }
     }
 }
@@ -45,3 +45,8 @@ android {
 flutter {
     source = "../.."
 }
+
+// dependencies{
+//     classpath 'com.android.tools.build:gradle:3.3.0'
+//     classpath 'com.google.gms:google-services:4.2.0'
+// }

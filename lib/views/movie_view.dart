@@ -93,18 +93,22 @@ class _MovieViewState extends State<MovieView> {
               GlobalValues.banUpdListMovies.value =
                   !GlobalValues.banUpdListMovies.value;
               return QuickAlert.show(
-                  context: context,
-                  type: QuickAlertType.success,
-                  text: 'Transaction completed successfully!',
-                  autoCloseDuration: const Duration(seconds: 3),
-                  showConfirmBtn: false);
+                context: context,
+                type: QuickAlertType.success,
+                text: 'Película guardada correctamente!',
+                autoCloseDuration: const Duration(seconds: 3),
+                showConfirmBtn: false,
+              ).then((_) {
+                Navigator.of(context).pop();
+              });
             } else {
               return QuickAlert.show(
-                  context: context,
-                  type: QuickAlertType.error,
-                  text: 'Something was wrong',
-                  autoCloseDuration: const Duration(seconds: 3),
-                  showConfirmBtn: false);
+                context: context,
+                type: QuickAlertType.error,
+                text: 'Something was wrong',
+                autoCloseDuration: const Duration(seconds: 3),
+                showConfirmBtn: false,
+              );
             }
           });
         } else {
@@ -122,7 +126,8 @@ class _MovieViewState extends State<MovieView> {
             final String msj;
             QuickAlertType type = QuickAlertType.success;
             if (value > 0) {
-              GlobalValues.banUpdListMovies.value = !GlobalValues.banUpdListMovies.value;
+              GlobalValues.banUpdListMovies.value =
+                  !GlobalValues.banUpdListMovies.value;
               type = QuickAlertType.success;
               msj = 'Transaction completed Successfully!';
             } else {
@@ -135,7 +140,9 @@ class _MovieViewState extends State<MovieView> {
               text: msj,
               autoCloseDuration: const Duration(seconds: 3),
               showConfirmBtn: false,
-            );
+            ).then((_) {
+              Navigator.of(context).pop();
+            });
           });
         }
       },

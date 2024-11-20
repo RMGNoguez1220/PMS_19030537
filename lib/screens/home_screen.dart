@@ -7,11 +7,12 @@ import 'package:pmsn2024b/gameCard.dart';
 import 'package:pmsn2024b/provider/test_provider.dart';
 import 'package:pmsn2024b/screens/profile_screen.dart';
 import 'package:pmsn2024b/settings/colors_settings.dart';
-import 'package:pmsn2024b/settings/global_values.dart';
 import 'package:provider/provider.dart';
+import 'package:pmsn2024b/settings/theme_notifier.dart';
 
 class HomeScreen extends StatefulWidget {
-  const HomeScreen({super.key});
+  const HomeScreen({super.key, required this.themeNotifier});
+  final ThemeNotifier themeNotifier;
 
   @override
   State<HomeScreen> createState() => _HomeScreenState();
@@ -19,6 +20,7 @@ class HomeScreen extends StatefulWidget {
 
 class _HomeScreenState extends State<HomeScreen>
     with SingleTickerProviderStateMixin {
+  final ThemeNotifier themeNotifier = ThemeNotifier();
   late PageController pageController;
   double pageOffset = 0;
   late AnimationController controller;
@@ -61,9 +63,11 @@ class _HomeScreenState extends State<HomeScreen>
               Color.fromARGB(255, 92, 121, 76)
             ], duration: Duration(seconds: 5))
           ],
-          child: const Text(
+          child: Text(
             'BIENVENIDO',
-            style: TextStyle(fontWeight: FontWeight.bold),
+            style: TextStyle(
+                color: Theme.of(context).colorScheme.onSurface,
+                fontWeight: FontWeight.bold),
           ),
         ),
         leading: Builder(builder: (context) {
@@ -136,6 +140,7 @@ class _HomeScreenState extends State<HomeScreen>
           TabItem(icon: Icons.exit_to_app, title: 'Exit'),
         ],
         onTap: (int i) => setState(() {
+          //print(i);
           if (i == 2) {
             // El índice 2 corresponde a la opción "Exit"
             Navigator.pushReplacementNamed(context, '/login');
@@ -157,17 +162,28 @@ class _HomeScreenState extends State<HomeScreen>
           children: [
             FloatingActionButton.small(
               heroTag: "btn1",
+              backgroundColor: ColorsSettings.yellowColor,
               onPressed: () {
-                GlobalValues.banThemeDark.value = false;
+                widget.themeNotifier.setTheme('light');
               },
-              child: const Icon(Icons.light_mode),
+              child: Icon(Icons.wb_sunny, color: ColorsSettings.navColor),
             ),
             FloatingActionButton.small(
               heroTag: "btn2",
+              backgroundColor: Colors.grey,
               onPressed: () {
-                GlobalValues.banThemeDark.value = true;
+                widget.themeNotifier.setTheme('dark');
               },
-              child: const Icon(Icons.dark_mode),
+              child:
+                  const Icon(Icons.dark_mode_rounded, color: Colors.blueGrey),
+            ),
+            FloatingActionButton.small(
+              heroTag: "btn3",
+              onPressed: () {
+                widget.themeNotifier.setTheme('custom');
+              },
+              child:
+                  Icon(Icons.color_lens, color: ColorsSettings.btnLoginColor),
             )
           ],
         ),
@@ -233,7 +249,7 @@ class _HomeScreenState extends State<HomeScreen>
         'assets/anillo.png',
         'assets/MasterChief.png',
         'Es un supersoldado, conocido por su armadura Mjolnir y su lucha contra alienígenas para proteger a la humanidad.',
-        Colors.lightGreen,
+        Colors.blueGrey,
         Colors.blueGrey));
     list.add(Game(
         'Gears ',
@@ -325,9 +341,16 @@ class _HomeScreenState extends State<HomeScreen>
             ),
             accountName: Text(
               testProvider.name,
-              style: const TextStyle(fontWeight: FontWeight.bold),
+              style: Theme.of(context).textTheme.titleMedium?.copyWith(
+                    fontWeight: FontWeight.bold,
+                  ),
             ),
-            accountEmail: const Text('19030537@itcelaya.edu.mx'),
+            accountEmail: Text(
+              '19030537@itcelaya.edu.mx',
+              style: Theme.of(context).textTheme.bodyMedium?.copyWith(
+                    fontWeight: FontWeight.bold,
+                  ),
+            ),
             decoration: BoxDecoration(color: ColorsSettings.navColor),
           ),
           ListTile(
@@ -351,6 +374,36 @@ class _HomeScreenState extends State<HomeScreen>
             ),
             subtitle: const Text('API of movies'),
             leading: const Icon(Icons.movie),
+            trailing: const Icon(Icons.chevron_right),
+          ),
+          ListTile(
+            onTap: () => Navigator.pushNamed(context, '/moviesfirebase'),
+            title: const Text(
+              'Movies firebase',
+              style: TextStyle(fontWeight: FontWeight.bold),
+            ),
+            subtitle: const Text('Firebase'),
+            leading: const Icon(Icons.movie),
+            trailing: const Icon(Icons.chevron_right),
+          ),
+          ListTile(
+            onTap: () => Navigator.pushNamed(context, '/maps'),
+            title: const Text(
+              'Google Maps',
+              style: TextStyle(fontWeight: FontWeight.bold),
+            ),
+            subtitle: const Text('Test google maps'),
+            leading: const Icon(Icons.maps_home_work),
+            trailing: const Icon(Icons.chevron_right),
+          ),
+          ListTile(
+            onTap: () => Navigator.pushNamed(context, '/preferencestheme'),
+            title: const Text(
+              'Temas',
+              style: TextStyle(fontWeight: FontWeight.bold),
+            ),
+            subtitle: const Text('Configuración temas'),
+            leading: const Icon(Icons.color_lens),
             trailing: const Icon(Icons.chevron_right),
           ),
         ],
