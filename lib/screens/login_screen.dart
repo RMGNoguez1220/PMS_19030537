@@ -91,7 +91,7 @@ class _LoginScreenState extends State<LoginScreen> {
     );
 
     final ctnCredentials = Positioned(
-      bottom: 105,
+      bottom: 150,
       child: Container(
         width: screenWidth * .9,
         // margin: EdgeInsets.symmetric(horizontal: 10),
@@ -113,8 +113,8 @@ class _LoginScreenState extends State<LoginScreen> {
 
     final btnLogin = Positioned(
       width: screenWidth * .6,
-      height: screenHeight * .046,
-      bottom: 60,
+      height: screenHeight * .08,
+      bottom: 80,
       child: ElevatedButton.icon(
         style: ElevatedButton.styleFrom(
             side: const BorderSide(color: Colors.black, width: 1.5),
@@ -152,7 +152,7 @@ class _LoginScreenState extends State<LoginScreen> {
 
     final btnRegister = Positioned(
       width: screenWidth * .6,
-      height: screenHeight * .046,
+      height: screenHeight * .08,
       bottom: 10,
       child: ElevatedButton.icon(
         style: ElevatedButton.styleFrom(

@@ -202,7 +202,7 @@ class _HomeScreenState extends State<HomeScreen>
               transform: Matrix4.identity()
                 ..translate(0.0, size.height / 2 * (1 - animation.value))
                 ..scale(1 + (1 - animation.value)),
-              origin: const Offset(25, 25),
+              origin: const Offset(25, 80),
               child: InkWell(
                 onTap: () => controller.isCompleted
                     ? controller.reverse()
@@ -226,7 +226,7 @@ class _HomeScreenState extends State<HomeScreen>
           animation: animation,
           builder: (context, snapshot) {
             return Transform.translate(
-              offset: Offset(400.0 * (1 - animation.value), 0),
+              offset: Offset(800.0 * (1 - animation.value), 0),
               child: PageView.builder(
                 controller: pageController,
                 itemCount: getGames().length,

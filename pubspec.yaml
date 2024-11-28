@@ -54,6 +54,9 @@ dependencies:
   shared_preferences: ^2.0.15
   google_maps_flutter: ^2.9.0
   google_fonts: ^6.2.1
+  video_player: ^2.9.2
+  youtube_player_flutter: ^9.1.1
+
   # location: ^7.0.1
 
 dev_dependencies:

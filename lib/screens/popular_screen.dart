@@ -1,6 +1,7 @@
 import 'package:flutter/material.dart';
 import 'package:pmsn2024b/models/popular_moviedao.dart';
 import 'package:pmsn2024b/network/popular_api.dart';
+import 'package:pmsn2024b/settings/colors_settings.dart';
 
 class PopularScreen extends StatefulWidget {
   const PopularScreen({super.key});
@@ -21,6 +22,20 @@ class _PopularScreenState extends State<PopularScreen> {
   @override
   Widget build(BuildContext context) {
     return Scaffold(
+      appBar: AppBar(
+        title: const Text('Películas populares'),
+        actions: [
+          IconButton(
+            icon: Icon(
+              Icons.favorite,
+              color: ColorsSettings.bottomColor,
+            ),
+            onPressed: () {
+              Navigator.pushNamed(context, '/favorites');
+            },
+          ),
+        ],
+      ),
       body: FutureBuilder(
         future: popularApi!.getPopularMovies(),
         builder: (context, AsyncSnapshot<List<PopularMovieDao>> snapshot) {
@@ -75,7 +90,10 @@ class _PopularScreenState extends State<PopularScreen> {
                   color: Colors.black,
                   height: 50,
                   width: MediaQuery.of(context).size.width,
-                  child: Text(popular.title, style: const TextStyle(color: Colors.white),),
+                  child: Text(
+                    popular.title,
+                    style: const TextStyle(color: Colors.white),
+                  ),
                 ),
               )
             ],

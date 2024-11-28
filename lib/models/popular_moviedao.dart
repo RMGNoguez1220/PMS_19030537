@@ -1,3 +1,6 @@
+import 'actordao.dart';
+import 'videodao.dart';
+
 class PopularMovieDao {
   String backdropPath;
   int id;
@@ -10,20 +13,23 @@ class PopularMovieDao {
   String title;
   double voteAverage;
   int voteCount;
+  List<ActorDAO> actors;
+  List<VideoDAO> trailers;
 
-  PopularMovieDao({
-    required this.backdropPath,
-    required this.id,
-    required this.originalLanguage,
-    required this.originalTitle,
-    required this.overview,
-    required this.popularity,
-    required this.posterPath,
-    required this.releaseDate,
-    required this.title,
-    required this.voteAverage,
-    required this.voteCount,
-  });
+  PopularMovieDao(
+      {required this.backdropPath,
+      required this.id,
+      required this.originalLanguage,
+      required this.originalTitle,
+      required this.overview,
+      required this.popularity,
+      required this.posterPath,
+      required this.releaseDate,
+      required this.title,
+      required this.voteAverage,
+      required this.voteCount,
+      required this.actors,
+      required this.trailers});
 
   factory PopularMovieDao.fromMap(Map<String, dynamic> popular) {
     return PopularMovieDao(
@@ -38,6 +44,8 @@ class PopularMovieDao {
       title: popular['title'],
       voteAverage: popular['vote_average'],
       voteCount: popular['vote_count'],
+      actors: [],
+      trailers: [],
     );
   }
 }

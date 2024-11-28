@@ -110,7 +110,7 @@ class _RegisterScreenState extends State<RegisterScreen> {
     );
 
     final ctnCredentials = Positioned(
-      bottom: 110,
+      bottom: 150,
       child: Container(
         width: MediaQuery.of(context).size.width * .9,
         // margin: EdgeInsets.symmetric(horizontal: 10),
@@ -134,8 +134,8 @@ class _RegisterScreenState extends State<RegisterScreen> {
 
     final btnRegister = Positioned(
       width: MediaQuery.of(context).size.width * .6,
-      height: MediaQuery.of(context).size.height * .046,
-      bottom: 60,
+      height: MediaQuery.of(context).size.height * .08,
+      bottom: 80,
       child: ElevatedButton.icon(
         style: ElevatedButton.styleFrom(
             side: const BorderSide(color: Colors.black, width: 1.5),
@@ -169,7 +169,7 @@ class _RegisterScreenState extends State<RegisterScreen> {
 
     final btnCancel = Positioned(
       width: MediaQuery.of(context).size.width * .6,
-      height: MediaQuery.of(context).size.height * .046,
+      height: MediaQuery.of(context).size.height * .08,
       bottom: 10, // Lo colocamos un poco más abajo que el de registrarse
       child: ElevatedButton.icon(
         style: ElevatedButton.styleFrom(

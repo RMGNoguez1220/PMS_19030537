@@ -1,8 +1,10 @@
 import 'package:firebase_core/firebase_core.dart';
 import 'package:flutter/material.dart';
 import 'package:pmsn2024b/firebase_options.dart';
+import 'package:pmsn2024b/network/popular_api.dart';
 import 'package:pmsn2024b/provider/test_provider.dart';
 import 'package:pmsn2024b/screens/detail_popular_screen.dart';
+import 'package:pmsn2024b/screens/favorites_popular_screen.dart';
 import 'package:pmsn2024b/screens/home_screen.dart';
 import 'package:pmsn2024b/screens/login_screen.dart';
 import 'package:pmsn2024b/screens/maps_screen.dart';
@@ -36,6 +38,7 @@ class _MyAppState extends State<MyApp> {
 
   @override
   Widget build(BuildContext context) {
+    PopularApi().getPopularMovies();
     return ValueListenableBuilder<ThemeData>(
         valueListenable: themeNotifier,
         builder: (context, value, widget) {
@@ -52,13 +55,13 @@ class _MyAppState extends State<MyApp> {
                 "/db": (context) => const MoviesScreen(),
                 "/popular": (context) => const PopularScreen(),
                 "/detail": (context) => const DetailPopularScreen(),
+                "/favorites": (context) => const FavoritesPopularScreen(),
                 "/moviesfirebase": (context) => const MoviesScreenFirebase(),
                 "/maps": (context) => const MapsScreen(),
                 "/onboarding1": (context) => const OnboardingScreen1(),
                 "/onboarding2": (context) => const OnboardingScreen2(),
                 "/onboarding3": (context) => OnboardingScreen3(themeNotifier: themeNotifier),
                 "/preferencestheme": (context) => PreferencesThemeScreen(themeNotifier: themeNotifier),
-
               },
               debugShowCheckedModeBanner: false,
             ),
